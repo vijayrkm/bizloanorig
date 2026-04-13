@@ -1,0 +1,979 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AI Agent Loan Origination — Unsecured Business Term Loan — Complete Journey</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Fraunces:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+:root{
+--bg:#F4F3F0;--surface:#FFFFFF;--surface2:#EEEDEA;--surface3:#E4E3DF;
+--text:#1B1B19;--text2:#5A5954;--text3:#8C8B85;--text4:#B0AFA9;
+--accent:#0E7C62;--accent-light:#D6F0E8;--accent-mid:#A3DCC8;--accent-dark:#065C48;--accent-bg:#F0FAF6;
+--human:#C4421A;--human-light:#FDE8E0;--human-mid:#F5B8A0;--human-dark:#8B2E10;
+--blue:#1B6CB0;--blue-light:#E0F0FC;
+--amber:#B87D14;--amber-light:#FEF3D6;
+--red:#C0392B;--red-light:#FCE4E4;
+--green:#1E8C5E;--green-light:#D4F5E5;
+--border:#DDDCD8;--border2:#CCCBC5;
+--radius:8px;--radius-lg:12px;
+--font:'DM Sans',system-ui,sans-serif;
+--display:'Fraunces',Georgia,serif;
+}
+@keyframes fadeUp{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}
+@keyframes fadeIn{from{opacity:0}to{opacity:1}}
+@keyframes slideR{from{opacity:0;transform:translateX(16px)}to{opacity:1;transform:translateX(0)}}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.5}}
+@keyframes spin{to{transform:rotate(360deg)}}
+@keyframes typing{from{width:0}to{width:100%}}
+@keyframes blink{50%{border-color:transparent}}
+@keyframes progressFill{from{width:0}to{width:var(--fill,100%)}}
+@keyframes dotPulse{0%,80%,100%{transform:scale(0)}40%{transform:scale(1)}}
+body{background:var(--bg);color:var(--text);font-family:var(--font);min-height:100vh;font-size:13px;line-height:1.5}
+
+/* TOPBAR */
+.topbar{background:var(--surface);border-bottom:1px solid var(--border);height:48px;display:flex;align-items:center;padding:0 24px;gap:16px;position:sticky;top:0;z-index:100}
+.logo{font-family:var(--display);font-size:17px;font-weight:700;color:var(--accent-dark)}
+.logo span{font-weight:400;color:var(--text3);font-family:var(--font);font-size:12px;margin-left:6px}
+.topbar-right{margin-left:auto;display:flex;align-items:center;gap:12px}
+
+/* PROGRESS BAR */
+.progress-track{position:sticky;top:48px;z-index:99;background:var(--surface);border-bottom:1px solid var(--border);padding:10px 24px;display:flex;align-items:center;gap:8px}
+.progress-step{display:flex;align-items:center;gap:4px;font-size:10px;color:var(--text4);white-space:nowrap;cursor:pointer;transition:all .2s}
+.progress-step:hover{color:var(--text2)}
+.progress-step.done{color:var(--accent)}
+.progress-step.active{color:var(--text);font-weight:600}
+.progress-dot{width:8px;height:8px;border-radius:50%;border:1.5px solid var(--border);background:var(--surface);transition:all .3s}
+.progress-step.done .progress-dot{background:var(--accent);border-color:var(--accent)}
+.progress-step.active .progress-dot{border-color:var(--accent);box-shadow:0 0 0 3px var(--accent-light)}
+.progress-step.human-step.done .progress-dot{background:var(--human);border-color:var(--human)}
+.progress-step.human-step.active .progress-dot{border-color:var(--human);box-shadow:0 0 0 3px var(--human-light)}
+.progress-line{flex:0 0 16px;height:1px;background:var(--border)}
+.progress-step.done+.progress-line{background:var(--accent)}
+
+/* MAIN */
+.main{display:flex;height:calc(100vh - 90px)}
+.screen-pane{flex:1;overflow-y:auto;padding:24px 28px}
+.agent-pane{width:360px;border-left:1px solid var(--border);background:var(--surface);display:flex;flex-direction:column;flex-shrink:0}
+.agent-header{padding:14px 18px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:8px}
+.agent-header h4{font-size:13px;font-weight:600;flex:1}
+.agent-live{width:7px;height:7px;border-radius:50%;background:var(--accent);animation:pulse 2s infinite}
+.agent-body{flex:1;overflow-y:auto;padding:16px 18px}
+.agent-body::-webkit-scrollbar{width:3px}
+.agent-body::-webkit-scrollbar-thumb{background:var(--border2);border-radius:2px}
+
+/* STEP HEADER */
+.step-header{margin-bottom:20px;animation:fadeUp .4s ease}
+.step-label{display:flex;align-items:center;gap:8px;margin-bottom:6px}
+.step-num{font-size:11px;font-weight:700;color:var(--accent-dark);background:var(--accent-light);padding:3px 10px;border-radius:12px}
+.step-num.human{color:var(--human-dark);background:var(--human-light)}
+.role-badge{font-size:10px;font-weight:600;padding:3px 10px;border-radius:12px;text-transform:uppercase;letter-spacing:.4px}
+.role-sales{background:#E0F0FC;color:#1B6CB0}
+.role-credit{background:#F3E8FF;color:#6B21A8}
+.role-sanction{background:#FEF3D6;color:#92400E}
+.role-ops{background:#FDE8E0;color:#9A3412}
+.step-title{font-family:var(--display);font-size:22px;font-weight:600;color:var(--text);letter-spacing:-.3px}
+.step-desc{font-size:13px;color:var(--text2);margin-top:4px;max-width:600px;line-height:1.6}
+
+/* CARDS */
+.card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-lg);margin-bottom:14px;overflow:hidden}
+.card-head{padding:14px 16px;border-bottom:1px solid var(--surface2);display:flex;align-items:center;gap:8px}
+.card-head h5{font-size:13px;font-weight:600;flex:1}
+.card-body{padding:16px}
+.card-accent{border-left:3px solid var(--accent)}
+.card-human{border-left:3px solid var(--human)}
+
+/* FORMS */
+.form-row{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:12px}
+.form-row.single{grid-template-columns:1fr}
+.form-group{display:flex;flex-direction:column}
+.form-label{font-size:10px;font-weight:600;color:var(--text3);text-transform:uppercase;letter-spacing:.4px;margin-bottom:4px}
+.form-input{padding:8px 11px;border:1px solid var(--border);border-radius:6px;font-size:13px;font-family:var(--font);color:var(--text);background:var(--surface)}
+.form-input:focus{outline:none;border-color:var(--accent)}
+.form-val{padding:8px 11px;background:var(--surface2);border-radius:6px;font-size:13px;font-weight:500}
+.form-val.highlight{background:var(--accent-light);color:var(--accent-dark);font-weight:600}
+
+/* BADGES */
+.badge{display:inline-flex;align-items:center;gap:4px;padding:3px 10px;border-radius:16px;font-size:10px;font-weight:600;letter-spacing:.2px}
+.badge-green{background:var(--green-light);color:var(--green)}
+.badge-amber{background:var(--amber-light);color:var(--amber)}
+.badge-red{background:var(--red-light);color:var(--red)}
+.badge-blue{background:var(--blue-light);color:var(--blue)}
+.badge-gray{background:var(--surface2);color:var(--text3)}
+.badge-accent{background:var(--accent-light);color:var(--accent-dark)}
+
+/* BUTTONS */
+.btn{padding:9px 18px;border-radius:var(--radius);font-size:13px;font-weight:600;font-family:var(--font);cursor:pointer;border:1px solid;transition:all .15s;display:inline-flex;align-items:center;gap:6px}
+.btn-primary{background:var(--accent);color:#fff;border-color:var(--accent)}
+.btn-primary:hover{background:var(--accent-dark)}
+.btn-outline{background:none;color:var(--text2);border-color:var(--border)}
+.btn-outline:hover{background:var(--surface2)}
+.btn-human{background:var(--human);color:#fff;border-color:var(--human)}
+.btn-human:hover{background:var(--human-dark)}
+.btn-sm{padding:6px 12px;font-size:11px}
+
+/* TABLES */
+.data-table{width:100%;border-collapse:collapse;font-size:12px}
+.data-table th{text-align:left;padding:7px 10px;font-size:10px;text-transform:uppercase;letter-spacing:.4px;color:var(--text3);font-weight:600;border-bottom:1px solid var(--border);background:var(--surface2)}
+.data-table td{padding:8px 10px;border-bottom:1px solid var(--surface2)}
+.kv-table{width:100%;font-size:12px}
+.kv-table td{padding:5px 0;vertical-align:top}
+.kv-table td:first-child{color:var(--text3);width:42%;padding-right:10px}
+.kv-table td:last-child{font-weight:500}
+.kv-table tr+tr td{border-top:1px solid var(--surface2)}
+
+/* DOC ITEMS */
+.doc-item{display:flex;align-items:center;gap:10px;padding:10px 12px;border:1px solid var(--border);border-radius:var(--radius);margin-bottom:6px}
+.doc-icon{width:32px;height:32px;border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;flex-shrink:0}
+.doc-info{flex:1;min-width:0}
+.doc-name{font-size:12px;font-weight:500}
+.doc-status{font-size:10px;margin-top:1px}
+.doc-check{width:18px;height:18px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:9px;flex-shrink:0}
+
+/* AGENT EVENTS */
+.agent-event{position:relative;padding:0 0 16px 24px;border-left:1.5px solid var(--border);opacity:0;transform:translateX(12px)}
+.agent-event.visible{opacity:1;transform:translateX(0);transition:all .4s ease}
+.agent-event:last-child{border-left-color:transparent}
+.agent-event::before{content:'';position:absolute;left:-5px;top:3px;width:10px;height:10px;border-radius:50%;border:2px solid}
+.agent-event.ai::before{border-color:var(--accent);background:var(--accent-light)}
+.agent-event.ai.active::before{background:var(--accent);animation:pulse 1.5s infinite}
+.agent-event.human::before{border-color:var(--human);background:var(--human-light)}
+.agent-event.human.active::before{background:var(--human);animation:pulse 1.5s infinite}
+.agent-event.pending::before{border-color:var(--border);background:var(--surface2)}
+.agent-label{font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:.4px;margin-bottom:3px}
+.agent-event.ai .agent-label{color:var(--accent)}
+.agent-event.human .agent-label{color:var(--human)}
+.agent-event.pending .agent-label{color:var(--text4)}
+.agent-name{font-size:12px;font-weight:600;margin-bottom:4px;color:var(--text)}
+.agent-reasoning{font-size:11px;color:var(--text2);line-height:1.6;margin:6px 0;padding:8px 10px;background:var(--surface2);border-radius:6px;border-left:2px solid var(--accent-mid);font-style:italic}
+.agent-event.human .agent-reasoning{border-left-color:var(--human-mid)}
+.agent-outputs{list-style:none;padding:0;font-size:11px;color:var(--text2);line-height:1.6}
+.agent-outputs li{padding:2px 0 2px 14px;position:relative}
+.agent-outputs li::before{content:'→';position:absolute;left:0;color:var(--text4);font-size:10px}
+.agent-flag{display:inline-flex;align-items:center;gap:4px;padding:3px 8px;border-radius:4px;font-size:10px;font-weight:600;margin-top:4px}
+.agent-flag.ok{background:var(--green-light);color:var(--green)}
+.agent-flag.warn{background:var(--amber-light);color:var(--amber)}
+.agent-flag.critical{background:var(--red-light);color:var(--red)}
+.agent-flag.info{background:var(--blue-light);color:var(--blue)}
+.agent-meta{font-size:10px;color:var(--text4);margin-top:4px}
+.agent-handoff{margin:8px 0;padding:10px 12px;background:var(--human-light);border:1px solid var(--human-mid);border-radius:var(--radius);font-size:11px}
+.agent-handoff-title{font-weight:700;color:var(--human-dark);display:flex;align-items:center;gap:5px;margin-bottom:3px}
+.agent-handoff-detail{color:var(--human-dark);opacity:.8;line-height:1.5}
+.agent-section-label{font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:.8px;color:var(--text4);margin:12px 0 8px;padding-left:24px}
+
+/* METRICS */
+.metric-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(100px,1fr));gap:8px;margin-bottom:14px}
+.metric-card{background:var(--surface2);border-radius:var(--radius);padding:10px 12px}
+.metric-val{font-size:18px;font-weight:700;line-height:1.2}
+.metric-label{font-size:9px;color:var(--text3);text-transform:uppercase;letter-spacing:.3px;margin-top:2px}
+
+/* OFFER */
+.offer-card{background:linear-gradient(135deg,var(--accent-dark),#0A9E76);color:#fff;border-radius:var(--radius-lg);padding:20px;margin-bottom:14px}
+.offer-amount{font-family:var(--display);font-size:32px;font-weight:700}
+.offer-sub{font-size:11px;opacity:.7;text-transform:uppercase;letter-spacing:.3px;margin-bottom:2px}
+.offer-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:14px}
+.offer-item{background:rgba(255,255,255,.15);border-radius:var(--radius);padding:10px}
+.offer-item-val{font-size:15px;font-weight:600}
+.offer-item-label{font-size:9px;opacity:.7}
+
+/* CHECKLIST */
+.cp-item{display:flex;align-items:center;gap:10px;padding:8px 0;border-bottom:1px solid var(--surface2)}
+.cp-item:last-child{border:none}
+.cp-check{width:20px;height:20px;border-radius:5px;border:1.5px solid var(--border2);display:flex;align-items:center;justify-content:center;font-size:10px;flex-shrink:0}
+.cp-check.done{background:var(--accent);border-color:var(--accent);color:#fff}
+.cp-check.fail{background:var(--red-light);border-color:var(--red);color:var(--red)}
+.cp-label{font-size:12px;flex:1}
+.cp-status{font-size:10px;font-weight:600}
+
+/* NAV */
+.step-nav{position:sticky;bottom:0;background:var(--surface);border-top:1px solid var(--border);padding:12px 24px;display:flex;align-items:center;gap:12px;z-index:50}
+.step-nav-info{flex:1;font-size:12px;color:var(--text3)}
+.step-nav-info strong{color:var(--text)}
+.auto-play{display:flex;align-items:center;gap:6px;font-size:11px;color:var(--text3);cursor:pointer;user-select:none}
+.auto-play input{accent-color:var(--accent)}
+
+/* LOADING DOTS */
+.loading-dots{display:inline-flex;gap:3px}
+.loading-dots span{width:5px;height:5px;border-radius:50%;background:var(--accent);animation:dotPulse 1.4s infinite ease-in-out both}
+.loading-dots span:nth-child(1){animation-delay:-.32s}
+.loading-dots span:nth-child(2){animation-delay:-.16s}
+
+/* PROGRESS BAR SMALL */
+.prog-bar{height:5px;background:var(--surface2);border-radius:3px;overflow:hidden;margin:4px 0}
+.prog-fill{height:100%;border-radius:3px;background:var(--accent);transition:width .6s ease}
+
+/* SECTION */
+.section-label{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.6px;color:var(--text4);margin-bottom:8px}
+
+/* SCREEN AREA SCROLL */
+.screen-pane::-webkit-scrollbar{width:4px}
+.screen-pane::-webkit-scrollbar-thumb{background:var(--border2);border-radius:2px}
+
+/* RESPONSIVE */
+@media(max-width:1000px){.agent-pane{width:280px}}
+</style>
+</head>
+<body>
+<div class="topbar">
+  <div class="logo">LoanFlow<span>Unsecured Business Term Loan</span></div>
+  <div class="topbar-right">
+    <span class="badge badge-accent">Assisted journey — sales officer led</span>
+  </div>
+</div>
+
+<div class="progress-track" id="progressTrack"></div>
+
+<div class="main">
+  <div class="screen-pane" id="screenPane"></div>
+  <div class="agent-pane">
+    <div class="agent-header">
+      <div class="agent-live"></div>
+      <h4>AI agent activity</h4>
+      <span class="badge badge-green" style="font-size:9px">LIVE</span>
+    </div>
+    <div class="agent-body" id="agentBody"></div>
+  </div>
+</div>
+
+<div class="step-nav">
+  <div class="auto-play"><input type="checkbox" id="autoPlay"><label for="autoPlay">Auto-advance agents</label></div>
+  <div class="step-nav-info">Step <strong id="stepCurrent">1</strong> of <strong id="stepTotal">12</strong></div>
+  <button class="btn btn-outline btn-sm" id="prevBtn" onclick="go(-1)">← Previous</button>
+  <button class="btn btn-primary btn-sm" id="nextBtn" onclick="go(1)">Next step →</button>
+</div>
+
+<script>
+// ===================== STEP DATA =====================
+const steps = [
+// STEP 1
+{
+  num:1, title:'Lead registration & pre-qualification',
+  role:'Sales officer', roleClass:'role-sales', isHuman:false,
+  desc:'The sales officer enters basic business details collected from the applicant. The AI pre-qualification agent instantly checks eligibility against policy rules.',
+  screen:`
+<div class="card card-accent">
+  <div class="card-head"><h5>New loan application — lead registration</h5><span class="badge badge-blue">BTL-UNSEC</span></div>
+  <div class="card-body">
+    <div class="section-label">Applicant business details</div>
+    <div class="form-row"><div class="form-group"><span class="form-label">Entity name</span><input class="form-input" value="Apex Manufacturing Pvt Ltd"></div><div class="form-group"><span class="form-label">PAN</span><input class="form-input" value="AABCS1234F"></div></div>
+    <div class="form-row"><div class="form-group"><span class="form-label">Constitution</span><div class="form-val">Private Limited Company</div></div><div class="form-group"><span class="form-label">Year of incorporation</span><div class="form-val">2019 (7 years vintage)</div></div></div>
+    <div class="form-row"><div class="form-group"><span class="form-label">Annual turnover (FY24)</span><input class="form-input" value="₹4,50,00,000"></div><div class="form-group"><span class="form-label">Industry sector</span><div class="form-val">Manufacturing — Auto components</div></div></div>
+    <div class="form-row"><div class="form-group"><span class="form-label">Loan amount requested</span><input class="form-input" value="₹75,00,000"></div><div class="form-group"><span class="form-label">Purpose</span><div class="form-val">Working capital augmentation</div></div></div>
+    <div class="form-row"><div class="form-group"><span class="form-label">Promoter / director 1</span><input class="form-input" value="Rajesh Kumar — DIN 08765432"></div><div class="form-group"><span class="form-label">Promoter / director 2</span><input class="form-input" value="Meena Kumar — DIN 09876543"></div></div>
+    <div class="form-row"><div class="form-group"><span class="form-label">Registered address</span><input class="form-input" value="Plot 42, MIDC Andheri East, Mumbai 400093"></div><div class="form-group"><span class="form-label">GST registration</span><input class="form-input" value="27AABCS1234F1ZD"></div></div>
+    <div style="margin-top:16px;padding:14px;background:var(--accent-bg);border:1px solid var(--accent-mid);border-radius:var(--radius-lg)">
+      <div style="display:flex;align-items:center;gap:8px;margin-bottom:6px">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--accent-dark)" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><path d="M8 12l3 3 5-5"/></svg>
+        <span style="font-weight:700;color:var(--accent-dark);font-size:13px">Pre-qualified — eligible for BTL up to ₹75,00,000</span>
+      </div>
+      <div style="font-size:11px;color:var(--accent-dark);line-height:1.6">All basic eligibility criteria met: vintage &gt;3 years ✓ | turnover &gt;₹1 Cr ✓ | geography: Mumbai (approved) ✓ | sector: manufacturing (approved) ✓ | entity not in negative/caution list ✓</div>
+    </div>
+  </div>
+</div>
+<div style="font-size:11px;color:var(--text3);font-style:italic;margin-top:-6px">↑ Entity details auto-enriched from MCA, GSTN, and Udyam registries via API</div>
+  `,
+  agents:[
+    {type:'ai',status:'active',label:'Agent activated',name:'Lead capture & pre-qualification agent',
+     reasoning:'Received lead input with PAN AABCS1234F. I will first validate entity existence on MCA, then run eligibility rules against the BTL-UNSEC product program policy.',
+     outputs:['PAN lookup → entity confirmed: Apex Manufacturing Pvt Ltd (CIN: U28999MH2019PTC123456)','MCA API pull → entity status: Active, no winding-up proceedings','Udyam registry → MSME registration confirmed (UDYAM-MH-07-0012345)','GSTN validation → GST 27AABCS1234F1ZD active, regular filing'],
+     flag:{type:'ok',text:'Entity verified across MCA, GSTN, Udyam'},meta:'2.1 seconds'},
+    {type:'ai',status:'active',label:'Rules engine',name:'Policy eligibility check',
+     reasoning:'Checking against BTL-UNSEC-SME product program parameters: minimum vintage 3 years, minimum turnover ₹1 Cr, approved geography, approved sector, not on internal negative list or RBI caution list.',
+     outputs:['Vintage: 7 years ✓ (min 3)','Turnover: ₹4.5 Cr ✓ (min ₹1 Cr)','Geography: Mumbai — approved ✓','Sector: Manufacturing — approved (not in restricted list) ✓','Negative list screening: clear ✓','RBI caution list: clear ✓'],
+     flag:{type:'ok',text:'Pre-qualified — all 6 eligibility criteria passed'},meta:'0.8 seconds'},
+    {type:'ai',status:'pending',label:'Queued',name:'Document intake & OCR agent',outputs:['Waiting for sales officer to upload documents']},
+  ]
+},
+
+// STEP 2
+{
+  num:2, title:'Document collection & OCR processing',
+  role:'Sales officer', roleClass:'role-sales', isHuman:false,
+  desc:'The sales officer uploads documents collected from the business owner. The AI document agent processes each file — running OCR, extracting structured data, cross-validating across documents, and flagging inconsistencies.',
+  screen:`
+<div class="card card-accent">
+  <div class="card-head"><h5>Document upload & processing</h5><span class="badge badge-green">5 of 6 verified</span></div>
+  <div class="card-body">
+    <div class="doc-item" style="border-color:var(--accent-mid);background:var(--accent-bg)">
+      <div class="doc-icon" style="background:var(--green-light);color:var(--green)">ITR</div>
+      <div class="doc-info"><div class="doc-name">Income Tax Returns — AY 2023-24 & AY 2024-25</div><div class="doc-status" style="color:var(--green)">✓ OCR extracted • Gross income matched across both years • PAN cross-validated</div></div>
+      <div class="doc-check" style="background:var(--green);color:#fff">✓</div>
+    </div>
+    <div class="doc-item" style="border-color:var(--accent-mid);background:var(--accent-bg)">
+      <div class="doc-icon" style="background:var(--green-light);color:var(--green)">GST</div>
+      <div class="doc-info"><div class="doc-name">GST returns — GSTR-3B (12 months) + GSTR-2A (6 months)</div><div class="doc-status" style="color:var(--green)">✓ Monthly revenue extracted • 3B-2A reconciliation: 97.8% match • No discrepancy flags</div></div>
+      <div class="doc-check" style="background:var(--green);color:#fff">✓</div>
+    </div>
+    <div class="doc-item" style="border-color:var(--accent-mid);background:var(--accent-bg)">
+      <div class="doc-icon" style="background:var(--green-light);color:var(--green)">BS</div>
+      <div class="doc-info"><div class="doc-name">Bank statements — HDFC Bank current a/c (12 months)</div><div class="doc-status" style="color:var(--green)">✓ Statement parsed • ABB: ₹18.4L • Monthly credits avg: ₹38.2L • 0 EMI bounces</div></div>
+      <div class="doc-check" style="background:var(--green);color:#fff">✓</div>
+    </div>
+    <div class="doc-item" style="border-color:var(--accent-mid);background:var(--accent-bg)">
+      <div class="doc-icon" style="background:var(--green-light);color:var(--green)">FIN</div>
+      <div class="doc-info"><div class="doc-name">Audited financials — FY 2023-24</div><div class="doc-status" style="color:var(--green)">✓ P&L + balance sheet extracted • Auditor: S.K. Mehta & Co. (ICAI reg. verified)</div></div>
+      <div class="doc-check" style="background:var(--green);color:#fff">✓</div>
+    </div>
+    <div class="doc-item" style="border-color:var(--accent-mid);background:var(--accent-bg)">
+      <div class="doc-icon" style="background:var(--green-light);color:var(--green)">KYC</div>
+      <div class="doc-info"><div class="doc-name">KYC — Director PAN cards + Aadhaar (2 directors)</div><div class="doc-status" style="color:var(--green)">✓ PAN-Aadhaar linked • Photo ID matched • Address proof validated via DigiLocker</div></div>
+      <div class="doc-check" style="background:var(--green);color:#fff">✓</div>
+    </div>
+    <div class="doc-item" style="border-color:var(--amber);border-style:dashed">
+      <div class="doc-icon" style="background:var(--amber-light);color:var(--amber)">MOA</div>
+      <div class="doc-info"><div class="doc-name">MOA / AOA</div><div class="doc-status" style="color:var(--amber)">⚠ Pending — sales officer to source from MCA portal or applicant</div></div>
+      <div class="doc-check" style="background:var(--amber-light);color:var(--amber)">!</div>
+    </div>
+    <div style="margin-top:14px">
+      <div class="section-label">Cross-validation matrix (AI generated)</div>
+      <table class="data-table">
+        <thead><tr><th>Check</th><th>Source A</th><th>Source B</th><th>Result</th></tr></thead>
+        <tbody>
+          <tr><td>Revenue (FY24)</td><td>ITR: ₹4.52 Cr</td><td>GST 3B: ₹4.48 Cr</td><td><span class="badge badge-green">Match (99.1%)</span></td></tr>
+          <tr><td>Revenue (FY24)</td><td>Audited P&L: ₹4.50 Cr</td><td>Bank credits: ₹4.58 Cr</td><td><span class="badge badge-green">Match (98.2%)</span></td></tr>
+          <tr><td>PAN entity</td><td>PAN: AABCS1234F</td><td>ITR PAN: AABCS1234F</td><td><span class="badge badge-green">Exact match</span></td></tr>
+          <tr><td>GST-PAN link</td><td>GST: 27AABCS1234F1ZD</td><td>PAN in GST: AABCS1234F</td><td><span class="badge badge-green">Verified</span></td></tr>
+          <tr><td>Director identity</td><td>KYC PAN: BXXPK1234A</td><td>MCA DIN: 08765432</td><td><span class="badge badge-green">Matched</span></td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+  `,
+  agents:[
+    {type:'ai',status:'active',label:'Processing',name:'Document intake & OCR agent',
+     reasoning:'6 document sets received. Running OCR on each using multi-model extraction (PDF text + image OCR fallback). After extraction, I will cross-validate data points across documents to check for consistency and flag any anomalies.',
+     outputs:['ITR: extracted gross total income, deductions, PAN — both AYs processed','GST: parsed 12 monthly 3B returns + 6 months 2A — built monthly revenue curve','Bank statements: parsed 365 days of transactions — computed ABB, monthly averages, EMI patterns, large unusual credits','Audited financials: extracted P&L (revenue, COGS, EBITDA, PAT) and balance sheet (assets, liabilities, net worth)','KYC: PAN OCR matched, Aadhaar verified via DigiLocker XML response','Cross-validation: 5/5 checks passed — revenue consistent across ITR, GST, P&L, bank at 97-99% match'],
+     flag:{type:'ok',text:'OCR confidence: 96.1% — all cross-validations passed'},meta:'14.2 seconds total'},
+    {type:'ai',status:'active',label:'Alert',name:'Document completeness checker',
+     reasoning:'Checking uploaded documents against BTL-UNSEC mandatory document checklist. MOA/AOA is a mandatory document for private limited companies.',
+     outputs:['Completeness: 5/6 mandatory documents uploaded','Missing: MOA/AOA — required for private limited entities','Recommendation: Sales officer can download from MCA portal (₹100 fee) or request from applicant'],
+     flag:{type:'warn',text:'MOA/AOA pending — application can proceed to bureau but full underwriting requires this document'},meta:'1.1 seconds'},
+  ]
+},
+
+// STEP 3
+{
+  num:3, title:'KYC, AML & regulatory screening',
+  role:'Sales officer', roleClass:'role-sales', isHuman:false,
+  desc:'The AI agent runs comprehensive background checks — KYC verification, AML screening, and regulatory compliance checks. The sales officer sees results populate in real-time.',
+  screen:`
+<div class="card card-accent">
+  <div class="card-head"><h5>KYC / AML / regulatory screening results</h5><span class="badge badge-green">All clear</span></div>
+  <div class="card-body">
+    <div class="metric-grid">
+      <div class="metric-card"><div class="metric-val" style="color:var(--green)">✓</div><div class="metric-label">CKYC verified</div></div>
+      <div class="metric-card"><div class="metric-val" style="color:var(--green)">✓</div><div class="metric-label">AML clear</div></div>
+      <div class="metric-card"><div class="metric-val" style="color:var(--green)">✓</div><div class="metric-label">MCA active</div></div>
+      <div class="metric-card"><div class="metric-val" style="color:var(--green)">✓</div><div class="metric-label">Directors clear</div></div>
+    </div>
+    <div class="section-label">Detailed screening results</div>
+    <table class="data-table">
+      <thead><tr><th>Check</th><th>Source</th><th>Detail</th><th>Status</th></tr></thead>
+      <tbody>
+        <tr><td>CKYC</td><td>CERSAI CKYC registry</td><td>CKYC ID: 50001234567 — record found and matched</td><td><span class="badge badge-green">Verified</span></td></tr>
+        <tr><td>Aadhaar eKYC</td><td>DigiLocker / UIDAI</td><td>Director 1: matched • Director 2: matched</td><td><span class="badge badge-green">Verified</span></td></tr>
+        <tr><td>PAN verification</td><td>NSDL / UTIITSL</td><td>Entity PAN: active • Both director PANs: active</td><td><span class="badge badge-green">Verified</span></td></tr>
+        <tr><td>OFAC screening</td><td>US Treasury OFAC SDN</td><td>No match found for entity or directors</td><td><span class="badge badge-green">Clear</span></td></tr>
+        <tr><td>PEP check</td><td>Internal PEP database</td><td>Neither director is a politically exposed person</td><td><span class="badge badge-green">Clear</span></td></tr>
+        <tr><td>Adverse media</td><td>News screening engine</td><td>No adverse media coverage found (last 5 years)</td><td><span class="badge badge-green">Clear</span></td></tr>
+        <tr><td>RBI caution list</td><td>RBI wilful defaulter list</td><td>Entity not listed • Directors not listed</td><td><span class="badge badge-green">Clear</span></td></tr>
+        <tr><td>MCA entity status</td><td>MCA21 portal</td><td>Status: Active • Annual filings: up to date (FY24)</td><td><span class="badge badge-green">Active</span></td></tr>
+        <tr><td>Director DIN</td><td>MCA DIN registry</td><td>DIN 08765432: active, not disqualified • DIN 09876543: active</td><td><span class="badge badge-green">Active</span></td></tr>
+        <tr><td>CERSAI charge check</td><td>CERSAI registry</td><td>1 existing charge: CC with HDFC Bank (₹50L limit)</td><td><span class="badge badge-blue">1 charge noted</span></td></tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+  `,
+  agents:[
+    {type:'ai',status:'active',label:'Running',name:'KYC / AML / CKYC agent',
+     reasoning:'Entity PAN provided. I will run parallel checks: (1) CKYC lookup on CERSAI, (2) Aadhaar eKYC for both directors via DigiLocker, (3) PAN verification via NSDL, (4) AML screening across OFAC SDN, internal PEP database, and adverse media, (5) RBI wilful defaulter/caution list check, (6) MCA entity and director status validation, (7) CERSAI existing charge search.',
+     outputs:['CKYC: record found — ID 50001234567, details matched against application','Aadhaar eKYC: both directors verified via DigiLocker XML (demographic + photo match)','PAN verification: entity PAN active since 2019, director PANs active','AML screening: 0 hits across OFAC, PEP, adverse media databases','RBI caution list: entity and directors not listed','MCA status: Active, no winding-up, annual filings current through FY24','Director DINs: both active, no section 164 disqualification','CERSAI: 1 existing charge — cash credit facility with HDFC Bank (₹50L limit, registered 2021)'],
+     flag:{type:'ok',text:'All 10 regulatory checks passed — no adverse findings'},meta:'4.6 seconds (7 parallel API calls)'},
+  ]
+},
+
+// STEP 4
+{
+  num:4, title:'Credit bureau analysis',
+  role:'Sales officer', roleClass:'role-sales', isHuman:false,
+  desc:'The AI agent pulls credit bureau reports for the entity and all promoters, then analyses the credit history, existing exposures, and repayment behaviour.',
+  screen:`
+<div class="card card-accent">
+  <div class="card-head"><h5>Credit bureau analysis</h5><span class="badge badge-green">Healthy profile</span></div>
+  <div class="card-body">
+    <div class="metric-grid">
+      <div class="metric-card"><div class="metric-val" style="color:var(--accent)">756</div><div class="metric-label">CIBIL — Entity</div></div>
+      <div class="metric-card"><div class="metric-val" style="color:var(--accent)">742</div><div class="metric-label">CIBIL — Dir 1</div></div>
+      <div class="metric-card"><div class="metric-val" style="color:var(--accent)">768</div><div class="metric-label">CIBIL — Dir 2</div></div>
+      <div class="metric-card"><div class="metric-val" style="color:var(--green)">0</div><div class="metric-label">DPD 90+ (24m)</div></div>
+    </div>
+    <div class="section-label">Entity — commercial bureau (CIBIL rank)</div>
+    <table class="kv-table">
+      <tr><td>CIBIL CMR rank</td><td>CMR-4 (Low-moderate risk)</td></tr>
+      <tr><td>Total exposure</td><td>₹1.20 Cr (1 CC: ₹50L + 1 TL: ₹70L)</td></tr>
+      <tr><td>Highest DPD (24m)</td><td>0 days — no overdue recorded</td></tr>
+      <tr><td>Credit utilisation</td><td>CC: 62% avg (₹31L / ₹50L limit)</td></tr>
+      <tr><td>Account age</td><td>Oldest: 5 years (HDFC CC), newest: 2 years (Axis TL)</td></tr>
+      <tr><td>Suit filed / write-off</td><td>None</td></tr>
+      <tr><td>Enquiry count (6m)</td><td>3 enquiries (within policy: max 6)</td></tr>
+    </table>
+    <div class="section-label" style="margin-top:14px">Director 1 — Rajesh Kumar (personal bureau)</div>
+    <table class="kv-table">
+      <tr><td>CIBIL score</td><td>742</td></tr>
+      <tr><td>Personal exposure</td><td>Home loan ₹45L (HDFC Ltd) — EMI regular</td></tr>
+      <tr><td>Credit card</td><td>2 cards — ₹3.5L limit — 38% utilisation — no overdue</td></tr>
+      <tr><td>DPD history</td><td>0 DPD in 36 months</td></tr>
+    </table>
+    <div class="section-label" style="margin-top:14px">Director 2 — Meena Kumar (personal bureau)</div>
+    <table class="kv-table">
+      <tr><td>CIBIL score</td><td>768</td></tr>
+      <tr><td>Personal exposure</td><td>No personal loans</td></tr>
+      <tr><td>Credit card</td><td>1 card — ₹2L limit — minimal usage</td></tr>
+      <tr><td>DPD history</td><td>0 DPD in 36 months</td></tr>
+    </table>
+  </div>
+</div>
+  `,
+  agents:[
+    {type:'ai',status:'active',label:'Processing',name:'Bureau pull & analysis agent',
+     reasoning:'Initiating bureau pulls from CIBIL (TransUnion), Equifax, Experian, and CRIF High Mark for entity AABCS1234F and both directors. I will compute a consolidated view: worst-case DPD, total exposure, overleveraging check, and enquiry velocity assessment.',
+     outputs:['Entity CIBIL commercial report pulled — CMR rank 4, credit score equivalent 756','Director 1 personal bureau: CIBIL 742 — home loan regular, credit cards clean','Director 2 personal bureau: CIBIL 768 — minimal credit usage, clean history','Equifax cross-check: consistent with CIBIL data, no additional adverse information','Total group exposure: ₹1.20 Cr (commercial) + ₹45L (personal HL) = ₹1.65 Cr','Overleveraging check: proposed ₹75L would take total to ₹2.40 Cr vs turnover ₹4.5 Cr — leverage ratio 0.53x (within 1.5x policy cap)','Enquiry velocity: 3 in 6 months — acceptable (policy max: 6)','Suit-filed accounts: none across entity and directors'],
+     flag:{type:'ok',text:'Bureau profile healthy — all scores above 700 threshold, zero DPD, no adverse'},meta:'5.3 seconds (8 bureau API calls)'},
+  ]
+},
+
+// STEP 5
+{
+  num:5, title:'Financial spreading & cash flow analysis',
+  role:'Sales officer', roleClass:'role-sales', isHuman:false,
+  desc:'The AI agent auto-spreads the financials from ITR and audited statements, computes key ratios, analyses bank statement cash flows, and determines debt serviceability.',
+  screen:`
+<div class="card card-accent">
+  <div class="card-head"><h5>Financial analysis — AI auto-spread</h5><span class="badge badge-accent">Auto-generated from documents</span></div>
+  <div class="card-body">
+    <div class="section-label">Profit & loss summary</div>
+    <table class="data-table">
+      <thead><tr><th>Particulars</th><th>FY 2022-23</th><th>FY 2023-24</th><th>YoY change</th></tr></thead>
+      <tbody>
+        <tr><td>Revenue from operations</td><td>₹3.85 Cr</td><td style="font-weight:600">₹4.50 Cr</td><td><span class="badge badge-green">+16.9%</span></td></tr>
+        <tr><td>COGS / direct expenses</td><td>₹2.69 Cr</td><td>₹3.11 Cr</td><td>+15.6%</td></tr>
+        <tr><td>Gross profit</td><td>₹1.16 Cr (30.1%)</td><td>₹1.39 Cr (30.9%)</td><td><span class="badge badge-green">+0.8pp</span></td></tr>
+        <tr><td>Operating expenses</td><td>₹0.72 Cr</td><td>₹0.82 Cr</td><td>+13.9%</td></tr>
+        <tr><td>EBITDA</td><td>₹0.44 Cr (11.4%)</td><td style="font-weight:600">₹0.57 Cr (12.7%)</td><td><span class="badge badge-green">+29.5%</span></td></tr>
+        <tr><td>Depreciation + interest</td><td>₹0.14 Cr</td><td>₹0.17 Cr</td><td></td></tr>
+        <tr><td>PAT</td><td>₹0.24 Cr (6.2%)</td><td style="font-weight:600">₹0.38 Cr (8.5%)</td><td><span class="badge badge-green">+58.3%</span></td></tr>
+      </tbody>
+    </table>
+    <div class="section-label" style="margin-top:14px">Key ratios</div>
+    <div class="metric-grid">
+      <div class="metric-card"><div class="metric-val" style="color:var(--accent)">1.82x</div><div class="metric-label">DSCR</div></div>
+      <div class="metric-card"><div class="metric-val">2.1x</div><div class="metric-label">TOL / TNW</div></div>
+      <div class="metric-card"><div class="metric-val">1.35</div><div class="metric-label">Current ratio</div></div>
+      <div class="metric-card"><div class="metric-val">0.8x</div><div class="metric-label">D/E ratio</div></div>
+    </div>
+    <div class="section-label">Bank statement analysis (12 months)</div>
+    <table class="kv-table">
+      <tr><td>Average bank balance</td><td>₹18.4 Lakhs</td></tr>
+      <tr><td>Avg monthly credit</td><td>₹38.2 Lakhs</td></tr>
+      <tr><td>Avg monthly debit</td><td>₹36.8 Lakhs</td></tr>
+      <tr><td>EMI bounces (12m)</td><td style="color:var(--green);font-weight:600">0 bounces</td></tr>
+      <tr><td>Inward return (cheques)</td><td>2 instances (₹1.2L, ₹0.8L) — immaterial</td></tr>
+      <tr><td>Cash deposit ratio</td><td>8.2% of total credits — acceptable</td></tr>
+      <tr><td>Seasonal pattern</td><td>Revenue dips in Jul-Aug (monsoon), peaks in Oct-Mar</td></tr>
+    </table>
+  </div>
+</div>
+  `,
+  agents:[
+    {type:'ai',status:'active',label:'Processing',name:'Financial spreading & analysis agent',
+     reasoning:'Spreading P&L and balance sheet from audited financials (FY23, FY24). I will cross-reference with ITR gross income and GST monthly revenue to validate. Then computing DSCR using the proposed new EMI alongside existing debt obligations. Bank statement analysis will independently verify cash flows.',
+     outputs:['P&L auto-spread: revenue ₹4.50 Cr FY24 (+16.9% YoY) — growth trajectory positive','EBITDA margin improved from 11.4% to 12.7% — operating leverage kicking in','DSCR computation: net cash accrual ₹55.2L / (existing EMI ₹14.8L + proposed EMI ₹21.4L) = 1.82x — above 1.5x policy minimum','TOL/TNW: 2.1x — within 4x policy cap','Current ratio: 1.35 — above 1.2 minimum','Bank ABB: ₹18.4L — stable, no sharp dips','EMI bounce ratio: 0% — clean repayment behaviour','GST-ITR-P&L revenue cross-validation: within 2% tolerance across all sources'],
+     flag:{type:'ok',text:'Financials healthy — DSCR 1.82x, improving margins, clean bank conduct'},meta:'9.8 seconds'},
+  ]
+},
+
+// STEP 6
+{
+  num:6, title:'Alternate data enrichment',
+  role:'Sales officer', roleClass:'role-sales', isHuman:false,
+  desc:'The AI agent enriches the application with non-traditional data signals — GST e-way bills, EPFO data, digital footprint, and UPI volumes — to build a 360° view of the business.',
+  screen:`
+<div class="card card-accent">
+  <div class="card-head"><h5>Alternate data signals</h5><span class="badge badge-accent">AI enriched</span></div>
+  <div class="card-body">
+    <div class="section-label">Trade & supply chain signals</div>
+    <table class="kv-table">
+      <tr><td>GST e-way bills (12m)</td><td>342 bills generated — avg ₹1.3L per bill — consistent volumes</td></tr>
+      <tr><td>Top 5 buyers concentration</td><td>62% of revenue — moderate concentration risk</td></tr>
+      <tr><td>Supplier payment cycle</td><td>Avg 38 days — within industry norm (30-45 days)</td></tr>
+    </table>
+    <div class="section-label" style="margin-top:14px">Employment & operational signals</div>
+    <table class="kv-table">
+      <tr><td>EPFO contribution</td><td>42 active employees — monthly ₹1.68L contribution — consistent 12 months</td></tr>
+      <tr><td>ESIC registration</td><td>Active — no claims or disputes</td></tr>
+      <tr><td>Electricity consumption</td><td>Avg 8,400 units/month — correlates with manufacturing activity</td></tr>
+    </table>
+    <div class="section-label" style="margin-top:14px">Digital presence & reputation</div>
+    <table class="kv-table">
+      <tr><td>Google business rating</td><td>4.2 ★ (87 reviews) — positive sentiment</td></tr>
+      <tr><td>IndiaMART / TradeIndia</td><td>Active seller profile — 156 product inquiries (6m)</td></tr>
+      <tr><td>Website / social</td><td>Active website (updated 2025), LinkedIn page (340 followers)</td></tr>
+    </table>
+    <div class="section-label" style="margin-top:14px">Payment ecosystem</div>
+    <table class="kv-table">
+      <tr><td>UPI inflows (monthly avg)</td><td>₹22.4L — significant B2B collection via UPI</td></tr>
+      <tr><td>Payment gateway</td><td>Not applicable (B2B manufacturing)</td></tr>
+      <tr><td>TReDS participation</td><td>Registered on M1xchange — 8 invoices discounted (₹42L, last 6m)</td></tr>
+    </table>
+  </div>
+</div>
+  `,
+  agents:[
+    {type:'ai',status:'active',label:'Enriching',name:'Alternate data & enrichment agent',
+     reasoning:'Pulling non-traditional data sources to triangulate business health. GST e-way bills will confirm actual goods movement. EPFO data validates employee strength and operational continuity. Digital footprint signals business reputation and market presence. TReDS participation indicates supply chain maturity.',
+     outputs:['E-way bills: 342 in 12 months — goods movement pattern consistent with reported turnover','EPFO: 42 employees, no sudden workforce reduction — stable operations','Electricity: 8,400 units/month correlates with declared manufacturing capacity','Google rating: 4.2★ — positive customer sentiment, no fraud/scam complaints','IndiaMART: active seller — 156 inquiries signals ongoing demand','TReDS: 8 invoices discounted on M1xchange — entity is digitally mature, has trade credit access','UPI collections: ₹22.4L/month — significant portion of revenue collected digitally'],
+     flag:{type:'ok',text:'Strong alternate data signals — operational activity consistent with declared financials'},meta:'6.4 seconds (12 API calls)'},
+  ]
+},
+
+// STEP 7
+{
+  num:7, title:'AI credit underwriting & risk scoring',
+  role:'Sales officer', roleClass:'role-sales', isHuman:false,
+  desc:'The AI underwriting agent synthesises all data inputs into a credit score, risk grade, and recommendation. It generates a complete credit memo for the credit officer to review.',
+  screen:`
+<div class="card card-accent">
+  <div class="card-head"><h5>AI underwriting decision</h5><span class="badge badge-blue">Auto-decision: REFER</span></div>
+  <div class="card-body">
+    <div class="metric-grid" style="grid-template-columns:repeat(5,1fr)">
+      <div class="metric-card"><div class="metric-val" style="color:var(--accent)">A2</div><div class="metric-label">Risk grade</div></div>
+      <div class="metric-card"><div class="metric-val">78</div><div class="metric-label">App score</div></div>
+      <div class="metric-card"><div class="metric-val">2.8%</div><div class="metric-label">PD estimate</div></div>
+      <div class="metric-card"><div class="metric-val" style="color:var(--accent)">₹65L</div><div class="metric-label">Recommended</div></div>
+      <div class="metric-card"><div class="metric-val">14.5%</div><div class="metric-label">Rec. rate</div></div>
+    </div>
+    <div class="section-label">Scorecard breakdown</div>
+    <table class="data-table">
+      <thead><tr><th>Parameter</th><th>Weight</th><th>Input</th><th>Score</th></tr></thead>
+      <tbody>
+        <tr><td>Bureau score (entity)</td><td>20%</td><td>CIBIL 756</td><td><strong>16.2 / 20</strong></td></tr>
+        <tr><td>Financial ratios (DSCR, TOL/TNW)</td><td>25%</td><td>DSCR 1.82x, TOL/TNW 2.1x</td><td><strong>19.5 / 25</strong></td></tr>
+        <tr><td>Business vintage</td><td>10%</td><td>7 years</td><td><strong>8.0 / 10</strong></td></tr>
+        <tr><td>Revenue trend</td><td>15%</td><td>+16.9% YoY</td><td><strong>13.0 / 15</strong></td></tr>
+        <tr><td>Banking conduct</td><td>15%</td><td>0 EMI bounces, ABB ₹18.4L</td><td><strong>14.0 / 15</strong></td></tr>
+        <tr><td>Alternate data signals</td><td>15%</td><td>Strong across all parameters</td><td><strong>12.5 / 15</strong></td></tr>
+        <tr style="background:var(--accent-bg)"><td style="font-weight:700">Total application score</td><td style="font-weight:700">100%</td><td></td><td style="font-weight:700;color:var(--accent)">78.2 / 100</td></tr>
+      </tbody>
+    </table>
+    <div style="margin-top:14px;padding:12px;background:var(--amber-light);border-radius:var(--radius);border-left:3px solid var(--amber)">
+      <div style="font-weight:700;color:var(--amber);font-size:12px;margin-bottom:4px">⚠ Amount deviation — refer to credit officer</div>
+      <div style="font-size:11px;color:var(--text2);line-height:1.6">Requested amount: ₹75,00,000. AI recommended amount: ₹65,00,000. Reason: DSCR comfort level reduces below 1.5x at ₹75L with proposed EMI. At ₹65L, DSCR remains at 1.62x — within policy floor. Credit officer review required for amount deviation.</div>
+    </div>
+    <div style="margin-top:10px;padding:12px;background:var(--surface2);border-radius:var(--radius)">
+      <div style="font-weight:600;font-size:12px;margin-bottom:4px">AI recommendation summary</div>
+      <div style="font-size:11px;color:var(--text2);line-height:1.6">Approve at ₹65,00,000 for 48 months at 14.5% p.a. (reducing balance). Processing fee 1.5% + GST. Applicant shows strong business fundamentals, clean bureau, improving financials, and positive alternate data signals. Amount reduced from ₹75L to ₹65L to maintain DSCR above 1.5x policy floor. No policy deviations other than amount. Referring to credit officer for review.</div>
+    </div>
+  </div>
+</div>
+  `,
+  agents:[
+    {type:'ai',status:'active',label:'Decisioning',name:'Credit underwriting & scoring agent',
+     reasoning:'Synthesising all inputs: bureau (CIBIL 756), financial ratios (DSCR 1.82x at current debt, but drops to 1.42x at ₹75L proposed), business vintage (7 yrs), revenue growth (+16.9%), banking conduct (clean), and alternate data (strong). Running the scorecard model and policy rules engine to generate risk grade and recommended terms. Key issue: at ₹75L the DSCR drops below the 1.5x policy floor — I will recommend a reduced amount of ₹65L where DSCR holds at 1.62x.',
+     outputs:['Application scorecard: 78.2/100 — maps to risk grade A2 (Good)','PD estimate: 2.8% (12-month forward-looking)','Policy rules check: 7 of 8 rules passed','FAILED RULE: DSCR at requested amount (₹75L) = 1.42x — below 1.5x floor','Recalculated at ₹65L: DSCR = 1.62x — passes all rules','Recommended pricing: 14.5% p.a. (risk-grade based pricing grid A2 = 14-15%)','Auto-decision: REFER to credit officer (amount deviation from customer request)','Credit memo generated with all supporting analysis for human review'],
+     flag:{type:'warn',text:'Amount reduced ₹75L → ₹65L to maintain DSCR compliance — human review required'},meta:'3.2 seconds'},
+    {type:'ai',status:'pending',label:'Handoff',name:'→ Credit officer queue',outputs:['Credit memo and complete application package queued for credit officer review'],
+    },
+  ]
+},
+
+// STEP 8 — HUMAN
+{
+  num:8, title:'Credit officer review & decision',
+  role:'Credit officer', roleClass:'role-credit', isHuman:true,
+  desc:'The credit officer reviews the AI-generated credit memo, validates the financial assumptions, and makes the credit decision. This is a mandatory human-in-the-loop gate — the AI cannot approve loans autonomously.',
+  screen:`
+<div class="card card-human">
+  <div class="card-head" style="background:var(--human-light)"><h5>Credit memo — for review</h5><span class="badge" style="background:var(--human);color:#fff">Human decision required</span></div>
+  <div class="card-body">
+    <div style="display:grid;grid-template-columns:2fr 1fr;gap:16px">
+      <div>
+        <div class="section-label">AI credit memo summary</div>
+        <table class="kv-table">
+          <tr><td>Applicant</td><td>Apex Manufacturing Pvt Ltd</td></tr>
+          <tr><td>Product</td><td>Unsecured business term loan</td></tr>
+          <tr><td>Amount requested</td><td>₹75,00,000</td></tr>
+          <tr><td>AI recommended amount</td><td style="color:var(--accent);font-weight:700">₹65,00,000</td></tr>
+          <tr><td>Reason for reduction</td><td>DSCR drops below 1.5x floor at ₹75L</td></tr>
+          <tr><td>Risk grade</td><td>A2 (Good) — PD 2.8%</td></tr>
+          <tr><td>DSCR (at ₹65L)</td><td>1.62x</td></tr>
+          <tr><td>Bureau score</td><td>756 (entity) — clean history</td></tr>
+          <tr><td>Recommended rate</td><td>14.5% p.a. (reducing)</td></tr>
+          <tr><td>Recommended tenure</td><td>48 months</td></tr>
+          <tr><td>Processing fee</td><td>1.5% + GST</td></tr>
+          <tr><td>Policy deviations</td><td style="color:var(--amber)">Amount deviation only (customer requested ₹75L)</td></tr>
+        </table>
+        <div class="section-label" style="margin-top:14px">Credit officer notes</div>
+        <div style="padding:10px 12px;background:var(--surface2);border-radius:var(--radius);font-size:12px;line-height:1.6;border:1px solid var(--border)">
+          <div style="font-style:italic;color:var(--text2)">Reviewed AI credit memo. Financial spreading and ratio analysis validated — DSCR computation methodology is correct. Revenue trend is strong (+16.9% YoY) and margin expansion supports business health. Agreeing with AI recommendation to limit amount to ₹65L to maintain DSCR headroom. Bureau profile is clean. Alternate data signals are corroborative. No concerns on KYC/AML.</div>
+          <div style="margin-top:8px;font-weight:600;color:var(--accent-dark)">Decision: APPROVE at ₹65,00,000 | Rate: 14.5% | Tenure: 48 months</div>
+          <div style="margin-top:4px;font-size:11px;color:var(--text3)">— Priya Menon, Assistant Credit Manager, 13 Apr 2026, 2:45 PM</div>
+        </div>
+      </div>
+      <div>
+        <div class="section-label">Risk assessment</div>
+        <div class="metric-grid" style="grid-template-columns:1fr">
+          <div class="metric-card"><div class="metric-val" style="color:var(--accent)">A2</div><div class="metric-label">Risk grade</div></div>
+          <div class="metric-card"><div class="metric-val" style="color:var(--accent)">78.2</div><div class="metric-label">Application score</div></div>
+          <div class="metric-card"><div class="metric-val">1.62x</div><div class="metric-label">DSCR (at ₹65L)</div></div>
+          <div class="metric-card"><div class="metric-val" style="color:var(--green)">0</div><div class="metric-label">DPD 90+</div></div>
+        </div>
+        <div class="section-label" style="margin-top:8px">Delegation check</div>
+        <div style="padding:10px;background:var(--green-light);border-radius:var(--radius);font-size:11px;color:var(--green);line-height:1.5">
+          ₹65L is within ACM individual delegation limit (₹1 Cr for A1-A3 risk grades). No credit committee escalation required. Forwarding to sanctioning authority for final approval.
+        </div>
+      </div>
+    </div>
+    <div style="display:flex;gap:8px;margin-top:16px;justify-content:flex-end">
+      <button class="btn btn-outline btn-sm">Return for rework</button>
+      <button class="btn btn-outline btn-sm" style="color:var(--red);border-color:var(--red)">Decline</button>
+      <button class="btn btn-human btn-sm">✓ Approve & forward to sanction →</button>
+    </div>
+  </div>
+</div>
+  `,
+  agents:[
+    {type:'human',status:'active',label:'Human review',name:'Credit officer — Priya Menon, ACM',
+     reasoning:'This is a mandatory human-in-the-loop gate. The AI has generated the credit memo and recommendation, but a credit officer must independently validate the analysis, exercise judgment on risk factors the model may not capture, and make the approve/decline decision.',
+     outputs:['Reviewed AI credit memo — 12 minutes review time','Validated DSCR computation methodology — confirmed correct','Cross-checked revenue trend against GST data — consistent','Agreed with amount reduction rationale (₹75L → ₹65L)','Confirmed no additional risk factors beyond model scope','Decision: APPROVE at ₹65,00,000'],
+     flag:{type:'ok',text:'Credit officer approved — within individual delegation (₹1 Cr for A1-A3)'},meta:'Review time: 12 minutes'},
+    {type:'ai',status:'active',label:'Routing',name:'Workflow routing agent',
+     outputs:['Delegation check: ₹65L within ACM limit for A2 grade — no committee escalation needed','Forwarding approved file to sanctioning authority for final sign-off'],
+     meta:'0.3 seconds'},
+  ]
+},
+
+// STEP 9 — HUMAN
+{
+  num:9, title:'Sanctioning authority approval',
+  role:'Sanctioning authority', roleClass:'role-sanction', isHuman:true,
+  desc:'The sanctioning authority reviews the approved credit proposal, confirms the sanction terms, and issues the formal sanction. This is the final approval gate before the offer is generated.',
+  screen:`
+<div class="card card-human">
+  <div class="card-head" style="background:var(--human-light)"><h5>Sanction approval</h5><span class="badge" style="background:var(--human);color:#fff">Final approval gate</span></div>
+  <div class="card-body">
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px">
+      <div>
+        <div class="section-label">Sanction summary</div>
+        <table class="kv-table">
+          <tr><td>Applicant</td><td>Apex Manufacturing Pvt Ltd</td></tr>
+          <tr><td>Sanction amount</td><td style="font-weight:700;font-size:15px;color:var(--accent-dark)">₹65,00,000</td></tr>
+          <tr><td>Interest rate</td><td>14.5% p.a. (reducing balance)</td></tr>
+          <tr><td>Tenure</td><td>48 months</td></tr>
+          <tr><td>EMI</td><td>₹1,78,240 / month</td></tr>
+          <tr><td>Processing fee</td><td>1.5% + GST (₹1,15,050)</td></tr>
+          <tr><td>Prepayment</td><td>2% on outstanding after 6 EMIs</td></tr>
+          <tr><td>Risk grade</td><td>A2 (Good)</td></tr>
+          <tr><td>Credit officer</td><td>Priya Menon, ACM — Approved</td></tr>
+        </table>
+      </div>
+      <div>
+        <div class="section-label">Conditions precedent</div>
+        <div class="cp-item"><div class="cp-check done">✓</div><div class="cp-label">KYC / AML clearance</div></div>
+        <div class="cp-item"><div class="cp-check done">✓</div><div class="cp-label">Bureau verification</div></div>
+        <div class="cp-item"><div class="cp-check done">✓</div><div class="cp-label">Financial analysis complete</div></div>
+        <div class="cp-item"><div class="cp-check done">✓</div><div class="cp-label">Credit officer approval</div></div>
+        <div class="cp-item"><div class="cp-check" style="border-color:var(--amber);color:var(--amber)">○</div><div class="cp-label">MOA / AOA submission</div><span class="cp-status" style="color:var(--amber)">Pre-disbursal</span></div>
+        <div class="cp-item"><div class="cp-check" style="border-color:var(--text4)">○</div><div class="cp-label">NACH mandate registration</div><span class="cp-status" style="color:var(--text3)">Post-sanction</span></div>
+        <div class="cp-item"><div class="cp-check" style="border-color:var(--text4)">○</div><div class="cp-label">Loan agreement execution</div><span class="cp-status" style="color:var(--text3)">Post-sanction</span></div>
+      </div>
+    </div>
+    <div style="margin-top:16px;padding:10px 12px;background:var(--surface2);border-radius:var(--radius);font-size:12px;line-height:1.6;border:1px solid var(--border)">
+      <div style="font-style:italic;color:var(--text2)">Reviewed and approved. Terms are in line with product program. Risk grade A2 and clean bureau support the sanction. MOA/AOA to be obtained as condition precedent to disbursement.</div>
+      <div style="margin-top:6px;font-weight:600;color:var(--human-dark)">Sanctioned: ₹65,00,000 — Vikram Iyer, Credit Manager</div>
+      <div style="font-size:11px;color:var(--text3)">13 Apr 2026, 3:15 PM</div>
+    </div>
+    <div style="display:flex;gap:8px;margin-top:14px;justify-content:flex-end">
+      <button class="btn btn-outline btn-sm">Escalate to committee</button>
+      <button class="btn btn-human btn-sm">✓ Sanction approved — generate offer →</button>
+    </div>
+  </div>
+</div>
+  `,
+  agents:[
+    {type:'human',status:'active',label:'Human approval',name:'Sanctioning authority — Vikram Iyer, CM',
+     reasoning:'Final approval gate. The sanctioning authority verifies that the credit officer has done a thorough review, the terms are within product program parameters, and delegation is properly exercised. This is a governance checkpoint.',
+     outputs:['Verified credit officer review notes — comprehensive','Confirmed sanction terms align with product program BTL-UNSEC-SME','Delegation check: ₹65L within CM limit (₹2 Cr for A1-A4)','Noted CP: MOA/AOA to be obtained before disbursement','Sanction approved — triggering offer generation'],
+     flag:{type:'ok',text:'Sanction approved — all governance requirements met'},meta:'Review time: 8 minutes'},
+  ]
+},
+
+// STEP 10
+{
+  num:10, title:'Offer generation & KFS',
+  role:'Sales officer', roleClass:'role-sales', isHuman:false,
+  desc:'The AI agent generates the sanction letter, key fact statement (KFS) per RBI digital lending guidelines, and communicates the offer to the borrower via the sales officer.',
+  screen:`
+<div class="card card-accent">
+  <div class="card-head"><h5>Sanction offer — ready for customer communication</h5><span class="badge badge-green">Approved</span></div>
+  <div class="card-body">
+    <div class="offer-card">
+      <div class="offer-sub">Sanctioned loan amount</div>
+      <div class="offer-amount">₹65,00,000</div>
+      <div class="offer-grid">
+        <div class="offer-item"><div class="offer-item-val">14.5%</div><div class="offer-item-label">Interest rate (p.a. reducing)</div></div>
+        <div class="offer-item"><div class="offer-item-val">48 months</div><div class="offer-item-label">Tenure</div></div>
+        <div class="offer-item"><div class="offer-item-val">₹1,78,240</div><div class="offer-item-label">Monthly EMI</div></div>
+        <div class="offer-item"><div class="offer-item-val">₹1,15,050</div><div class="offer-item-label">Processing fee (incl GST)</div></div>
+      </div>
+    </div>
+    <div class="section-label">Key fact statement (KFS) — RBI mandated</div>
+    <div class="card" style="border:2px solid var(--accent-mid)">
+      <div class="card-body" style="padding:12px">
+        <table class="kv-table">
+          <tr><td>Lender</td><td>[Bank Name]</td></tr>
+          <tr><td>Loan amount</td><td>₹65,00,000</td></tr>
+          <tr><td>Rate of interest</td><td>14.5% p.a. (monthly reducing balance)</td></tr>
+          <tr><td>Effective APR</td><td>16.2% p.a. (inclusive of processing fee)</td></tr>
+          <tr><td>EMI</td><td>₹1,78,240 per month × 48 months</td></tr>
+          <tr><td>Total interest payable</td><td>₹20,55,520</td></tr>
+          <tr><td>Total amount payable</td><td>₹85,55,520 (principal + interest)</td></tr>
+          <tr><td>Processing fee</td><td>₹97,500 + ₹17,550 GST = ₹1,15,050</td></tr>
+          <tr><td>Prepayment charges</td><td>2% of outstanding principal (after 6 EMIs)</td></tr>
+          <tr><td>Penal charges</td><td>2% p.a. on overdue EMI amount (simple interest)</td></tr>
+          <tr><td>Cooling off / look-up</td><td>3 business days from disbursement</td></tr>
+          <tr><td>Grievance redressal</td><td>Nodal officer: grievance@bank.in | 1800-XXX-XXXX</td></tr>
+        </table>
+      </div>
+    </div>
+    <div style="display:flex;gap:8px;margin-top:14px">
+      <button class="btn btn-outline btn-sm" style="flex:1">Download sanction letter (PDF)</button>
+      <button class="btn btn-primary btn-sm" style="flex:1">Send offer to customer →</button>
+    </div>
+  </div>
+</div>
+  `,
+  agents:[
+    {type:'ai',status:'active',label:'Generating',name:'Sanction letter & offer agent',
+     reasoning:'Sanction approved by Vikram Iyer (CM). Generating formal sanction letter with all terms, conditions, and schedules. Also generating KFS per RBI Digital Lending Guidelines (Sep 2022) — this includes APR calculation, total cost of borrowing, cooling-off period, and grievance mechanism.',
+     outputs:['Sanction letter generated with MITC (most important terms & conditions)','KFS generated — APR computed at 16.2% (includes processing fee impact)','Repayment schedule generated: 48 EMIs of ₹1,78,240 starting 15 May 2026','Total cost of borrowing clearly disclosed per RBI mandate','Cooling-off period: 3 business days — borrower can exit without penalty','Offer package ready for sales officer to communicate to customer'],
+     flag:{type:'ok',text:'KFS compliant with RBI digital lending guidelines (Sep 2022)'},meta:'1.8 seconds'},
+  ]
+},
+
+// STEP 11
+{
+  num:11, title:'Agreement execution & pre-disbursement',
+  role:'Operations officer', roleClass:'role-ops', isHuman:false,
+  desc:'After the customer accepts the offer, the AI agent generates the loan agreement, orchestrates e-signing, sets up NACH mandate, and prepares the file for disbursement. The operations officer verifies all conditions precedent.',
+  screen:`
+<div class="card card-accent">
+  <div class="card-head"><h5>Pre-disbursement checklist</h5><span class="badge badge-green">All CPs satisfied</span></div>
+  <div class="card-body">
+    <div class="section-label">Conditions precedent — status</div>
+    <div class="cp-item"><div class="cp-check done">✓</div><div class="cp-label">Customer accepted offer & signed e-consent</div><span class="cp-status badge badge-green">Done</span></div>
+    <div class="cp-item"><div class="cp-check done">✓</div><div class="cp-label">Loan agreement executed (Aadhaar e-sign)</div><span class="cp-status badge badge-green">Done</span></div>
+    <div class="cp-item"><div class="cp-check done">✓</div><div class="cp-label">NACH / e-mandate registered (HDFC Bank a/c)</div><span class="cp-status badge badge-green">Active</span></div>
+    <div class="cp-item"><div class="cp-check done">✓</div><div class="cp-label">MOA / AOA obtained (downloaded from MCA)</div><span class="cp-status badge badge-green">Done</span></div>
+    <div class="cp-item"><div class="cp-check done">✓</div><div class="cp-label">Agreement stamped via e-stamping (Maharashtra)</div><span class="cp-status badge badge-green">₹6,500</span></div>
+    <div class="cp-item"><div class="cp-check done">✓</div><div class="cp-label">CERSAI charge registered</div><span class="cp-status badge badge-green">Reg. #CR20260413</span></div>
+    <div class="cp-item"><div class="cp-check done">✓</div><div class="cp-label">Processing fee debited from disbursement</div><span class="cp-status badge badge-green">₹1,15,050</span></div>
+    <div class="cp-item"><div class="cp-check done">✓</div><div class="cp-label">All documents stored in DMS with audit trail</div><span class="cp-status badge badge-green">Archived</span></div>
+    <div style="margin-top:14px">
+      <div class="section-label">Disbursement details</div>
+      <table class="kv-table">
+        <tr><td>Disbursement amount</td><td style="font-weight:700;font-size:14px">₹63,84,950 (₹65,00,000 − ₹1,15,050 processing fee)</td></tr>
+        <tr><td>Credit to account</td><td>HDFC Bank — A/c No. XXXX4567 (Apex Manufacturing Pvt Ltd)</td></tr>
+        <tr><td>Transfer mode</td><td>RTGS</td></tr>
+        <tr><td>First EMI date</td><td>15 May 2026</td></tr>
+      </table>
+    </div>
+  </div>
+</div>
+<div style="display:flex;gap:8px;margin-top:12px;justify-content:flex-end">
+  <button class="btn btn-human">✓ Authorize disbursement →</button>
+</div>
+  `,
+  agents:[
+    {type:'ai',status:'active',label:'Processing',name:'Agreement & e-sign agent',
+     reasoning:'Customer accepted the offer. Generating loan agreement with all schedules, annexures, and repayment table. Orchestrating Aadhaar e-sign for both directors. Simultaneously initiating NACH mandate registration and e-stamping.',
+     outputs:['Loan agreement generated: 22 pages incl schedules, T&Cs, repayment table','Aadhaar e-sign: Director 1 signed ✓ | Director 2 signed ✓','NACH mandate: registered on HDFC Bank a/c — mandate ID: NACH20260413APEX','E-stamping: Maharashtra stamp duty ₹6,500 paid — certificate generated','MOA/AOA: downloaded from MCA21 portal — document checklist now 6/6 complete','CERSAI: charge registered — registration #CR20260413','All documents archived in DMS — audit trail: 14 actions, 3 signatories'],
+     flag:{type:'ok',text:'All 8 conditions precedent satisfied — ready for disbursement authorization'},meta:'4.2 minutes (includes e-sign wait time)'},
+    {type:'human',status:'active',label:'Authorization required',name:'Operations officer — disbursement gate',
+     reasoning:'This is the final human gate before funds leave the bank. The operations officer must verify all CPs are genuinely satisfied (not just checked by the system), confirm NACH is active, and authorize the RTGS transfer.',
+     outputs:['Verifying CP checklist against actual document trail','Confirming NACH mandate is registered and active','Authorizing RTGS transfer of ₹63,84,950 to designated account'],
+    },
+  ]
+},
+
+// STEP 12
+{
+  num:12, title:'Disbursement & post-disbursement',
+  role:'Operations officer', roleClass:'role-ops', isHuman:false,
+  desc:'The disbursement agent executes the fund transfer, updates the core banking system, triggers welcome communications, and activates the post-disbursement monitoring agent for ongoing surveillance.',
+  screen:`
+<div class="card" style="border:2px solid var(--green);background:var(--green-light)">
+  <div class="card-body" style="text-align:center;padding:28px">
+    <div style="width:48px;height:48px;border-radius:50%;background:var(--green);color:#fff;display:flex;align-items:center;justify-content:center;margin:0 auto 12px;font-size:20px">✓</div>
+    <div style="font-family:var(--display);font-size:24px;font-weight:700;color:var(--green);margin-bottom:4px">Loan disbursed successfully</div>
+    <div style="font-size:13px;color:var(--text2)">₹63,84,950 credited to Apex Manufacturing Pvt Ltd — HDFC Bank A/c XXXX4567</div>
+    <div style="font-size:11px;color:var(--text3);margin-top:4px">RTGS Ref: RTGS20260413APEX001 | 13 Apr 2026, 4:12 PM</div>
+  </div>
+</div>
+<div class="card card-accent">
+  <div class="card-head"><h5>Loan account created</h5><span class="badge badge-green">Active</span></div>
+  <div class="card-body">
+    <table class="kv-table">
+      <tr><td>Loan account number</td><td style="font-weight:700">BTL-MUM-20260413-0847</td></tr>
+      <tr><td>Borrower</td><td>Apex Manufacturing Pvt Ltd</td></tr>
+      <tr><td>Product</td><td>Unsecured business term loan</td></tr>
+      <tr><td>Principal outstanding</td><td>₹65,00,000</td></tr>
+      <tr><td>Interest rate</td><td>14.5% p.a. (reducing)</td></tr>
+      <tr><td>EMI</td><td>₹1,78,240 (1st EMI: 15 May 2026)</td></tr>
+      <tr><td>Tenure remaining</td><td>48 months</td></tr>
+      <tr><td>NACH mandate</td><td>Active — HDFC Bank A/c XXXX4567</td></tr>
+      <tr><td>NPA classification</td><td>Standard asset</td></tr>
+    </table>
+  </div>
+</div>
+<div class="card card-accent">
+  <div class="card-head"><h5>Post-disbursement monitoring — activated</h5><span class="badge badge-accent">AI surveillance live</span></div>
+  <div class="card-body">
+    <div style="font-size:12px;color:var(--text2);line-height:1.7">
+      The early warning & monitoring agent is now actively tracking this account. It will monitor: bureau alert triggers, EMI bounce patterns (NACH return codes), GST filing regularity, EPFO contribution continuity, and financial stress signals. Any deterioration will be flagged to the relationship manager and collections team proactively.
+    </div>
+    <div class="metric-grid" style="margin-top:12px">
+      <div class="metric-card"><div class="metric-val" style="color:var(--green)">Low</div><div class="metric-label">Current risk</div></div>
+      <div class="metric-card"><div class="metric-val">Monthly</div><div class="metric-label">Review cycle</div></div>
+      <div class="metric-card"><div class="metric-val">6</div><div class="metric-label">EWS parameters</div></div>
+      <div class="metric-card"><div class="metric-val">Live</div><div class="metric-label">Bureau alerts</div></div>
+    </div>
+  </div>
+</div>
+  `,
+  agents:[
+    {type:'ai',status:'active',label:'Executing',name:'Disbursement agent',
+     reasoning:'Operations officer has authorized disbursement. Executing RTGS transfer to Apex Manufacturing designated account. Simultaneously updating core banking system (CBS), loan management system (LMS), and generating borrower communications.',
+     outputs:['RTGS transfer executed: ₹63,84,950 to HDFC A/c XXXX4567','RTGS reference: RTGS20260413APEX001 — confirmed by beneficiary bank','Loan account created in CBS: BTL-MUM-20260413-0847','LMS updated: repayment schedule loaded, NACH linked','Disbursement advice generated and emailed to borrower','Welcome SMS + email sent with loan account details and repayment schedule','Credit life insurance premium (if opted): not applicable in this case'],
+     flag:{type:'ok',text:'Disbursement successful — funds confirmed in borrower account'},meta:'45 seconds (RTGS settlement)'},
+    {type:'ai',status:'active',label:'Activated',name:'Early warning & monitoring agent',
+     reasoning:'Post-disbursement surveillance activated. Setting up continuous monitoring triggers: bureau alerts (CIBIL real-time), NACH bounce tracking, GST filing regularity, EPFO contributions, and financial stress indicators. Monthly automated health check scheduled.',
+     outputs:['Bureau alert subscription: activated for entity + both directors','NACH monitoring: first EMI due 15 May 2026 — reminder set for 10 May','GST filing tracker: monthly check on GSTR-3B filing regularity','EPFO monitor: quarterly employee count and contribution check','EWS model: 6-parameter stress model activated — monthly scoring','Portfolio dashboard: account added to RM Ankit Sharma\'s watchlist'],
+     flag:{type:'info',text:'Post-disbursement monitoring — 6 EWS parameters active, monthly review cycle'},meta:'Continuous'},
+  ]
+},
+];
+
+// ===================== RENDER ENGINE =====================
+let currentStep = 0;
+const totalSteps = steps.length;
+
+function renderProgressTrack(){
+  const track = document.getElementById('progressTrack');
+  let html = '';
+  steps.forEach((s,i)=>{
+    const cls = i < currentStep ? 'done' : i === currentStep ? 'active' : '';
+    const humanCls = s.isHuman ? 'human-step' : '';
+    html += `<div class="progress-step ${cls} ${humanCls}" onclick="jumpTo(${i})"><div class="progress-dot"></div><span style="display:none">${s.num}</span></div>`;
+    if(i < steps.length -1) html += `<div class="progress-line"></div>`;
+  });
+  track.innerHTML = html;
+}
+
+function renderScreen(){
+  const s = steps[currentStep];
+  const pane = document.getElementById('screenPane');
+  pane.scrollTop = 0;
+  pane.innerHTML = `
+    <div class="step-header">
+      <div class="step-label">
+        <span class="step-num ${s.isHuman?'human':''}">Step ${s.num} of ${totalSteps}</span>
+        <span class="role-badge ${s.roleClass}">${s.role}</span>
+        ${s.isHuman ? '<span class="badge" style="background:var(--human);color:#fff;font-size:9px">HUMAN-IN-THE-LOOP</span>' : ''}
+      </div>
+      <div class="step-title">${s.title}</div>
+      <div class="step-desc">${s.desc}</div>
+    </div>
+    ${s.screen}
+  `;
+}
+
+function renderAgents(){
+  const s = steps[currentStep];
+  const body = document.getElementById('agentBody');
+  body.scrollTop = 0;
+  const autoPlay = document.getElementById('autoPlay').checked;
+
+  let html = '';
+  s.agents.forEach((a,i)=>{
+    const statusLabel = a.status === 'active' ? (a.type==='human'?'Human action':'Processing') : a.status === 'pending' ? 'Queued' : 'Done';
+    html += `<div class="agent-event ${a.type} ${a.status}" id="agent-${i}" style="transition-delay:${autoPlay ? (i*0.6)+'s' : '0s'}">`;
+    html += `<div class="agent-label">${a.label || statusLabel}</div>`;
+    html += `<div class="agent-name">${a.name}</div>`;
+    if(a.reasoning){
+      html += `<div class="agent-reasoning">"${a.reasoning}"</div>`;
+    }
+    if(a.outputs){
+      html += `<ul class="agent-outputs">${a.outputs.map(o=>`<li>${o}</li>`).join('')}</ul>`;
+    }
+    if(a.flag){
+      html += `<div class="agent-flag ${a.flag.type}">${a.flag.text}</div>`;
+    }
+    if(a.meta){
+      html += `<div class="agent-meta">${a.meta}</div>`;
+    }
+    html += `</div>`;
+  });
+  body.innerHTML = html;
+
+  // Animate in
+  setTimeout(()=>{
+    s.agents.forEach((a,i)=>{
+      const el = document.getElementById('agent-'+i);
+      if(el){
+        const delay = autoPlay ? i * 600 : i * 150;
+        setTimeout(()=> el.classList.add('visible'), delay);
+      }
+    });
+  }, 100);
+}
+
+function updateNav(){
+  document.getElementById('stepCurrent').textContent = currentStep + 1;
+  document.getElementById('stepTotal').textContent = totalSteps;
+  document.getElementById('prevBtn').disabled = currentStep === 0;
+  document.getElementById('prevBtn').style.opacity = currentStep === 0 ? '.4' : '1';
+  document.getElementById('nextBtn').textContent = currentStep === totalSteps -1 ? 'Journey complete ✓' : 'Next step →';
+  document.getElementById('nextBtn').disabled = currentStep === totalSteps -1;
+  document.getElementById('nextBtn').style.opacity = currentStep === totalSteps -1 ? '.4' : '1';
+}
+
+function go(dir){
+  const next = currentStep + dir;
+  if(next < 0 || next >= totalSteps) return;
+  currentStep = next;
+  render();
+}
+function jumpTo(i){
+  currentStep = i;
+  render();
+}
+function render(){
+  renderProgressTrack();
+  renderScreen();
+  renderAgents();
+  updateNav();
+}
+
+// Keyboard nav
+document.addEventListener('keydown', e=>{
+  if(e.key === 'ArrowRight' || e.key === ' ') { e.preventDefault(); go(1); }
+  if(e.key === 'ArrowLeft') { e.preventDefault(); go(-1); }
+});
+
+render();
+</script>
+</body>
+</html>
